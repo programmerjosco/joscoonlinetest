@@ -24,7 +24,9 @@ urlpatterns = [
     path ('',views.home,name="home"),
     path('login',views.login_user,name="login"),
 path('scheme',views.scheme,name="scheme"),
-    path('chitdetails/<str:id>/',views.chitdetails,name="chitdetails")
+    path('chitdetails/<str:id>/',views.chitdetails,name="chitdetails"),
+    path('addpayment', views.addpayment, name="addpayment"),
+    # path('get-gold-rate/', views.get_gold_rate, name='get_gold_rate'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

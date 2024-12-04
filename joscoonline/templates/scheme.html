@@ -11,24 +11,25 @@
 <body style="background-color:cornsilk;">
 <!--<div class="d-flex justify-content-center align-items-center vh-100 mt-5">-->
 <div class="container" style="margin-top: 10px;">
-<form method="POST" action="{% url 'scheme' %}" class="container my-4 p-3 border rounded shadow">
-    {% csrf_token %}
-    <div class="row g-2 align-items-center">
+    <!-- Combined Form -->
+    <form method="POST" action="{% url 'scheme' %}" class="d-flex flex-wrap align-items-center border rounded shadow p-3">
+        {% csrf_token %}
+
         <!-- Start Date -->
-        <div class="col-auto">
-            <label for="start_date" class="form-label">Start Date</label>
+        <div class="me-3">
+            <label for="start_date" class="form-label mb-1">Start Date</label>
             <input type="date" id="start_date" name="start_date1" class="form-control">
         </div>
 
         <!-- End Date -->
-        <div class="col-auto">
-            <label for="end_date" class="form-label">End Date</label>
+        <div class="me-3">
+            <label for="end_date" class="form-label mb-1">End Date</label>
             <input type="date" id="end_date" name="end_date1" class="form-control">
         </div>
 
         <!-- Report Type -->
-        <div class="col-auto">
-            <label for="report" class="form-label">Report Type</label>
+        <div class="me-3">
+            <label for="report" class="form-label mb-1">Report Type</label>
             <select id="report" name="report" class="form-select">
                 <option value="1">Joining Report</option>
                 <option value="2">Payment Report</option>
@@ -36,26 +37,41 @@
             </select>
         </div>
 
-        <!-- Submit Button -->
-        <div class="col-auto">
-            <button type="submit" class="btn px-4 text-white" style="background-color: #7c0130; border-radius: 20px;">
+        <!-- Display Button -->
+        <div class="me-3">
+            <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
                 Display
             </button>
         </div>
+
+        <!-- Search Field -->
+        <div class="me-3">
+            <label for="search_data" class="form-label mb-1">Search</label>
+            <input type="text" id="search_data" name="search_data" class="form-control" style="width: 200px;">
+        </div>
+
+        <!-- Search Button -->
+        <div>
+            <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+                Search
+            </button>
+        </div>
+
+    </form>
+
+
+
+
+
+
+   {% if not searchquery %}
+    <div class="container custom-div">
+        <h3 class="text-center">{{ branch }} </h3>
+        <h4 class="text-center">{{ rtype }}</h4>
+        <h5 class="text-center">Details showing from {{ sdate }} to {{ edate }}</h5>
     </div>
-</form>
-
+{% endif %}
 <div class="container custom-div">
-
-    <h3 class="text-center">{{ branch }}</h3>
-      <h4 class="text-center">{{rtype}} </h4>
-    <h5 class="text-center">Details showing from {{ sdate }} to {{edate}} </h5>
-
-
-
-
-
-
     <table class="table bordered">
         <thead>
             <tr>
@@ -64,11 +80,17 @@
                 <th scope="col">Phone</th>
                 <th scope="col">Scheme ID</th>
                 <th scope="col">Indsoft ID</th>
-                <th scope="col">Payment Method</th>
+
                 <th class="text-end" scope="col">Amount</th>
                 <th class="text-end" scope="col">Gold Wt.</th>
                 <th class="text-end" scope="col">Gold Rate</th>
-                <th scope="col">Scheme Date</th>
+               <th scope="col">
+    {% if rtype == "Closed Report" %}
+        Closing Date
+    {% else %}
+        Scheme Date
+    {% endif %}
+</th>
 
             </tr>
         </thead>
@@ -79,8 +101,8 @@
             <td>{{k.name}}</td>
             <td>{{k.phone}}</td>
             <td>{{k.scheme_id}}</td>
-            <td><a href="{% url 'chitdetails' k.erp_scheme_id  %}">{{k.erp_scheme_id}}</a></td>
-            <td>{{k.payment_method}}</td>
+            <td><a href="{% url 'chitdetails' k.erp_scheme_id  %}" target="_blank">{{k.erp_scheme_id}}</a></td>
+
             <td class="text-end">{{k.amount}}</td>
             <td class="text-end">{{k.goldweight}}</td>
             <td class="text-end">{{k.goldrate}}</td>
@@ -99,10 +121,10 @@
     </table>
 </div>
 
-
-
-
 </div>
+
+
+
 
 <script>
     // Function to set today's date in 'YYYY-MM-DD' format
