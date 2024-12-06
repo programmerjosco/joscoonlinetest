@@ -11,7 +11,9 @@ from django.shortcuts import render, redirect
 from dateutil.relativedelta import relativedelta
 import random
 # Create your views here.
-from django.db import connection
+from django.db import connection, connections
+
+
 def home(request):
     q = f"select * from gold_scheme_masters "
 
@@ -615,10 +617,10 @@ def generate_unique_scheme_id():
 
 
 
-def searchrecord(user_id):
-    query = "SELECT COUNT(*) FROM user_kycs WHERE user_id = %s"
+def searchrecord(table,condition):
+    query = f"""SELECT COUNT(*) FROM {table} WHERE {condition}"""
     with connection.cursor() as cursor:
-        cursor.execute(query, [user_id])
+        cursor.execute(query)
         count = cursor.fetchone()[0]
     if count == 0:
         is_unique = True
@@ -627,6 +629,152 @@ def searchrecord(user_id):
     return(is_unique)
 
 
+def findrecord(table,condition,value):
+    query = f"""SELECT {value} FROM {table} WHERE {condition}"""
+    print(query)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        count = cursor.fetchone()[0]
+        return(count)
+
+
+
+
 
 def indsoftintegration(request):
-    return render(request, 'indsoftintegration.html')
+    context = {}
+
+
+
+    start_date1 = request.POST.get('start_date1', date.today().strftime('%m-%d-%Y'))
+    sdate = request.POST.get('start_date1', date.today().strftime('%d-%m-%Y'))
+    end_date1 = request.POST.get('end_date1', date.today().strftime('%m-%d-%Y'))
+    edate = request.POST.get('end_date1', date.today().strftime('%d-%m-%Y'))
+
+    for alias in connections.databases:
+        print(f"Connection Alias: {alias}")
+        print(f"Configuration: {connections.databases[alias]}")
+
+    try:
+        cn = '46'  # Assuming 'ekm' is the connection alias
+        with connections[cn].cursor() as cursor:
+            print("Connection successful!")
+
+            # Create the table if it doesn't exist
+            query = """ 
+                IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'CHITRCPTID')
+                CREATE TABLE CHITRCPTID (
+                    id INT 
+                );
+                """
+            cursor.execute(query)
+
+            # Fetch data from the database
+            query = f"""
+                SELECT DISTINCT cm.chit_key, chit_no, cm.cust_name, 
+                    ccm.Address + ', ' + ccm.Address1 + ', ' + ccm.Address2 + 
+                    ' [ Nominee : ' + cm.Nominee + '( ' + cm.Nrelation + ' )]' AS Address, 
+                    CASE 
+                        WHEN cm.Mobile = '' THEN ccm.phone_no 
+                        ELSE cm.Mobile 
+                    END AS Phone_no,
+                    cm.Cust_Code
+                FROM chitmast cm 
+                JOIN CHITCUSTMAST ccm ON cm.ccust_key = ccm.CCust_key
+                JOIN chitrcpt crp ON crp.chit_key = cm.chit_key
+                WHERE cm.close_flag = 'N' 
+                AND CONVERT(DATETIME, vch_date, 103) BETWEEN '{start_date1}' AND '{end_date1}'
+                ORDER BY cm.chit_key
+                """
+            cursor.execute(query)
+            result = cursor.fetchall()
+
+            data = [
+                {
+                    'chit_key': row[0],
+                    'chit_no': row[1],
+                    'cust_name': row[2],
+                    'address': row[3],
+                    'phone': row[4],
+                    'cust_code': row[5]
+                }
+                for row in result
+            ]
+
+            context = {'sdata': data}
+
+
+    except Exception as e:
+        print(f"Connection failed: {e}")
+
+    return render(request, 'indsoftintegration.html', context)
+
+
+def webupdate(request,cust_code=None, chit_key=None):
+    if request.POST:
+        branchid = request.user.branchid
+        cn = str(branchid)  # Assuming 'ekm' is the connection alias
+        with connections[cn].cursor() as cursor1:
+            query=f""" SELECT    cm.chit_key,chit_no,cm.cust_name,cm.email,ccm.Address+', ' + ccm.Address1 + ', ' + ccm.Address2 + ' [ Nominee :' + cm.Nominee + '( ' + cm.Nrelation +' )]' as Address, case when cm.Mobile='' then ccm.phone_no else cm.Mobile End as Phone_no,cm.Cust_Code,cm.inst_no,cm.doj  FROM chitmast cm , CHITCUSTMAST ccm where  cm.ccust_key = ccm.CCust_key and  cm.cust_code='{cust_code}' """
+            cursor1.execute(query)
+            result=cursor1.fetchone()
+            start_date = datetime.strptime(result[8], "%Y-%m-%d")
+            next_due = start_date + relativedelta(months=1)
+            scheme_end_date = start_date + relativedelta(months=10)
+
+            # Format dates for SQL
+            start_date_str = start_date.strftime('%Y-%m-%d')
+            next_due_str = next_due.strftime('%Y-%m-%d')
+            scheme_end_date_str = scheme_end_date.strftime('%Y-%m-%d')
+
+
+
+        if result:
+            scheme_id = f"JS_O_{random.randint(0, 99999999):08d}"
+
+            if not searchrecord("gold_scheme_masters", "erp_scheme_id='" + cust_code + "' and branch_id=" + branchid):
+                query=f"""INSERT INTO users (name, email, country_code, phone, status, is_complete) VALUES ('{result[2]}','{result[3]}','91','{result[5]}',1,1 """
+                with connection.cursor() as cursor:
+                 cursor.execute(query)
+                user_id=findrecord("users","phone='" + result[5] +"' and name='" + result[2] +"'","id")
+                query=f""" INSERT INTO user_kycs (user_id, name, address, type, status) VALUES ({user_id},'{result[2]}','{result[4]}','Aadhar Card',1"""
+                cursor.execute(query)
+                query=f""" INSERT INTO gold_scheme_masters (user_id, scheme_id, amount_accumulated, gold_accumulated, last_reduced, total_gold_weight, order_id, total_amount_accumulated, purchased_amount, branch_id, refund, discount_percentage, status, scheme_peroid, start_date, next_due, scheme_end_date, erp_scheme_id) VALUES({user_id},'{scheme_id}',0, 0, 0, 0, 0, 0, 0, {branchid}, 0, 3.5, 1,{result[7]},'{result[8]}','{next_due_str}','{scheme_end_date_str}','{cust_code}'"""
+                cursor.execute(query)
+                scheme_masterid=findrecord("gold_scheme_masters","erp_scheme_id='" + cust_code +"' and branchid=" +branchid,"id")
+
+                query=f"""select vch_no,vch_date,Amount,conv_rate,gold_wt,rcpt_no,case when trx_type='C' then 1 else case when trx_type='A' then case when cheque_no=''  then 2 else 4 end  else case when trx_type='B'then 4 else 5  end end end as Trx from chitrcpt  where chit_key={chit_key}"""
+                cursor1.executequery(query)
+                rows=cursor1.fetchall()
+                amt=0
+                gwt=0
+                for row1 in rows:
+                    next_due = row1[1] + relativedelta(months=1)
+                    next_due_str = next_due.strftime('%Y-%m-%d')
+                    query=f"""INSERT INTO gold_scheme_details (scheme_master_id, amount, gold_weight, gold_rate, status, payment_status, raz_order_id, transaction_id, next_due, `current_date`, payment_mode, payment_method) VALUES( { scheme_masterid},{row1[2]},{row1[4]},{row1[3]},1,1,'BANK',{row1[5]},'{ next_due_str}','{row1[1]}',1,{row1[6]}"""
+                    cursor.execute(query)
+                    amt=amt +row1[2]
+                    gwt=gwt+row1[4]
+                query=f""" update gold_scheme_masters set amount_accumulated={amt},gold_accumulated={gwt} ,total_gold_weight={gwt},total_amount_accumulated={amt} where erp_scheme_id='{cust_code}' and branch_id={branchid} """
+                cursor.execute(query)
+            else:
+                scheme_masterid = findrecord("gold_scheme_masters",
+                                             "erp_scheme_id='" + cust_code + "' and branchid=" + branchid, "id")
+
+                query = f"""select vch_no,vch_date,Amount,conv_rate,gold_wt,rcpt_no,case when trx_type='C' then 1 else case when trx_type='A' then case when cheque_no=''  then 2 else 4 end  else case when trx_type='B'then 4 else 5  end end end as Trx from chitrcpt  where chit_key={chit_key}"""
+                cursor1.executequery(query)
+                rows = cursor1.fetchall()
+                amt = 0
+                gwt = 0
+                for row1 in rows:
+                    next_due = row1[1] + relativedelta(months=1)
+                    next_due_str = next_due.strftime('%Y-%m-%d')
+                    query = f"""INSERT INTO gold_scheme_details (scheme_master_id, amount, gold_weight, gold_rate, status, payment_status, raz_order_id, transaction_id, next_due, `current_date`, payment_mode, payment_method) VALUES( {scheme_masterid},{row1[2]},{row1[4]},{row1[3]},1,1,'BANK',{row1[5]},'{next_due_str}','{row1[1]}',1,{row1[6]}"""
+                    with connection.cursor() as cursor:
+                        cursor.execute(query)
+                    amt = amt + row1[2]
+                    gwt = gwt + row1[4]
+                query = f""" update gold_scheme_masters set amount_accumulated={amt},gold_accumulated={gwt} ,total_gold_weight={gwt},total_amount_accumulated={amt} where erp_scheme_id='{cust_code}' and branch_id={branchid} """
+                cursor.execute(query)
+
+    return HttpResponse("Updated")

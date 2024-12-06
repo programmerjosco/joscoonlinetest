@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from joscoonline_app import views
@@ -28,7 +28,13 @@ path('scheme',views.scheme,name="scheme"),
     path('addpayment', views.addpayment, name="addpayment"),
     path('addnewscheme', views.addnewscheme, name="addnewscheme"),
     path('addnewschemedetails', views.addnewschemedetails, name="addnewschemedetails"),
-    path('indsoftintegration', views.indsoftintegration, name="indsoftintegration"),
+    path('indsoftintegration', views.indsoftintegration, name='indsoftintegration'),
+    path('web/<str:cust_code>/<int:chit_key>/', views.webupdate, name='webupdate'),
+    # re_path(
+    #     r'^indsoftintegration(?:/(?P<cust_code>[^/]*)/(?P<chit_key>[0-9]*)/)?$',
+    #     views.indsoftintegration,
+    #     name='indsoftintegration',
+    # ),
 
 
     # path('get-gold-rate/', views.get_gold_rate, name='get_gold_rate'),

@@ -77,33 +77,28 @@ MEDIA_ROOT=os.path.join(BASE_DIR),"media"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # MySQL database engine
-        'NAME': 'josco',         # Replace with your database name
-        'USER': 'joscodbadmin',              # Replace with your MySQL username
-        'PASSWORD': 'OIrLoW1ETcXwQHpbmCtD',          # Replace with your MySQL password
-        'HOST': 'josco-production-db-01.cfkcgxgxrps8.ap-south-1.rds.amazonaws.com',                  # Use the host where the database is located
+        'NAME': 'josco',                      # Replace with your database name
+        'USER': 'joscodbadmin',               # Replace with your MySQL username
+        'PASSWORD': 'OIrLoW1ETcXwQHpbmCtD',   # Replace with your MySQL password
+        'HOST': 'josco-production-db-01.cfkcgxgxrps8.ap-south-1.rds.amazonaws.com',  # Database host
         'PORT': '3306',                       # Default MySQL port
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  # Enforce strict mode
         },
-
-        'ekm': {
-            'ENGINE': 'mssql',  # Depending on the package you installed
-            'NAME': 'SCMJOSJMSBR8',  # Your database name
-            'USER': 'tonicoadmin',
-            'PASSWORD': 'P@$$w0rd^^#*',
-            'HOST': '192.168.200.10',  # Server address, e.g., 'localhost' or '127.0.0.1'
-            'PORT': '1433',  # Default SQL Server port
-            'OPTIONS': {
-                'driver': 'ODBC Driver 17 for SQL Server',  # Use the appropriate driver installed on your system
-
-            },
+    },
+    '46': {
+        'ENGINE': 'mssql',     # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR8',              # Your MSSQL database name
+        'USER': 'sa',                        # MSSQL username
+        'PASSWORD': '',                      # MSSQL password
+        'HOST': '192.168.13.2',              # MSSQL server address
+        'PORT': '1433',                      # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
         },
-
-
-
-
-    }
+    },
 }
+
 AUTH_USER_MODEL = 'joscoonline_app.CustomUser'
 
 # Password validation
