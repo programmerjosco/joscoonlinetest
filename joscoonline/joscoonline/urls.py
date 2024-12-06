@@ -26,6 +26,11 @@ urlpatterns = [
 path('scheme',views.scheme,name="scheme"),
     path('chitdetails/<str:id>/',views.chitdetails,name="chitdetails"),
     path('addpayment', views.addpayment, name="addpayment"),
+    path('addnewscheme', views.addnewscheme, name="addnewscheme"),
+    path('addnewschemedetails', views.addnewschemedetails, name="addnewschemedetails"),
+    path('indsoftintegration', views.indsoftintegration, name="indsoftintegration"),
+
+
     # path('get-gold-rate/', views.get_gold_rate, name='get_gold_rate'),
 ]
 if settings.DEBUG:

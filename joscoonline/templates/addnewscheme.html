@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block content %}
+<style>
+.form-wrapper {
+    margin: 10px;
+    font-family: Century Gothic, sans-serif; fs;
+}
+
+.form-container-horizontal {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.horizontal-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+}
+
+.horizontal-form label {
+    font-weight: bold;
+    margin-right: 5px;
+    min-width: 50px;
+}
+
+.horizontal-form input,
+.horizontal-form select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    min-width: 130px;
+}
+
+.horizontal-form button {
+    padding: 10px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.horizontal-form button:hover {
+    background-color: #0056b3;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+</style>
+
+<div class="form-wrapper">
+    <!-- First Form in Horizontal Layout -->
+    <div class="form-container-horizontal">
+        <h4>Submit Your Details</h4>
+        <form method="POST" action="{% url 'addnewscheme' %}" class="horizontal-form">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" name="name" value="{{name}}" placeholder="Your Name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" name="email" value="{{email}}" placeholder="Your Email" required>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" name="phone" value="{{phone}}" placeholder="Your Phone" required>
+
+            <button type="submit">Submit</button>
+        </form>
+        {% if ID %}
+        <p>User has existing schemes -
+        {% for k in schemes %}
+            {{k.schemes}},
+            {% endfor %}
+
+
+        </p>
+        {% endif %}
+    </div>
+
+    <!-- Combined Second and Third Forms in Horizontal Layout -->
+      <form method="POST" action="{% url 'addnewschemedetails' %}"  class="horizontal-form">
+    <div class="form-container-horizontal">
+        <h4>Additional Details</h4>
+
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ID}}">
+            <input type="hidden" name="name1" value="{{name}}">
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" placeholder="Enter Address" value="{{address}}" style="width:30%" required>
+
+            <label for="document">Nominee:</label>
+            <input type="text" name="nominee" placeholder="Enter Nominee"  style="width:10%" required>
+
+            <label for="relation">Relation:</label>
+            <select id="relation" name="relation" style="width:10%">
+                <option value="SON">SON</option>
+                <option value="DAUGHTER">DAUGHTER</option>
+                <option value="FATHER">FATHER</option>
+                <option value="MOTHER">MOTHER</option>
+                <option value="SPOUSE">SPOUSE</option>
+                <option value="GRAND FATHER">GRAND FATHER</option>
+                <option value="GRAND MOTHER">GRAND MOTHER</option>
+            </select>
+
+            <label for="type">Document:</label>
+            <select id="type" name="type" style="width:10%">
+                <option value="Aadhaar Card">Aadhaar Card</option>
+                <option value="Driving License">Driving License</option>
+                <option value="Voters ID">Voters ID</option>
+            </select>
+    </div>
+     <div class="form-container-horizontal">
+        <h4>Payment Details</h4>
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+
+            <label for="gold_rate">Gold Rate:</label>
+            <input type="number" name="gold_rate" value="{{gold_rate}}" placeholder="Enter Gold Rate">
+
+            <label for="amount">Amount:</label>
+            <input type="number" name="amount" placeholder="Enter Amount">
+            <label for="payment_method" class="form-label">Payment Method</label>
+                        <select id="payment_method" name="payment_method" class="form-select" required>
+                            <option value="1">Cash</option>
+                            <option value="2">UPI</option>
+                            <option value="3">Card</option>
+                            <option value="4">Net Banking</option>
+                        </select>
+
+            <button type="submit">Submit</button>
+
+    </div>
+      </form>
+</div>
+
+{% endblock %}

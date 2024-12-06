@@ -2,11 +2,14 @@ import math
 import re
 from datetime import date, datetime
 from os import truncate
-
+from random import random
+from datetime import date, timedelta
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from dateutil.relativedelta import relativedelta
+import random
 # Create your views here.
 from django.db import connection
 def home(request):
@@ -400,3 +403,230 @@ def addpayment(request):
 #         except:
 #                 print("     Error")
 #                 return JsonResponse({'success': False, 'gold_rate': str(0)})
+def addnewscheme(request):
+    context = {}
+    if request.method == 'POST':
+        today = datetime.today()
+        formatted_date = today .strftime("%Y-%m-%d")
+        query = f""" SELECT rate FROM gold_rate_logs WHERE `current_date`='{formatted_date}' and gold_purity=4 """ # Use parameterized query to prevent SQL injection
+
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            result2 = cursor.fetchone()  # Get the first matching row
+            if result2:
+                context['gold_rate'] = result2[0]
+            else:
+                context['gold_rate'] = 0
+
+        phone = request.POST.get('phone')
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        context['name'] =name
+        context['phone'] =phone
+        context['email'] = email
+
+        query = "SELECT * FROM users WHERE phone = %s"  # Use parameterized query to prevent SQL injection
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, [phone])
+            result = cursor.fetchone()  # Get the first matching row
+        print("Upto hear OK")
+        if result:
+            context['ID'] = result[0]  # Assuming the address is in the first column
+
+            query3 = "SELECT erp_scheme_id FROM gold_scheme_masters WHERE user_id = %s"
+
+            with connection.cursor() as cursor5:
+                cursor5.execute(query3, [result[0]])  # Pass the parameter as a list
+                result5 = cursor5.fetchall() # Get the first matching row
+                data = [
+                    {
+                        'schemes': row[0]
+
+                    }
+                    for row in result5
+                ]
+                context['schemes'] = data
+
+            query = f"""  SELECT * FROM user_kycs WHERE User_id ={result[0]} """  # Use parameterized query to prevent SQL injection
+
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                result1 = cursor.fetchone()  # Get the first matching row
+                if result1:
+                       context['address'] = result1[3]
+                else:
+                    context['address'] = "None"
+            context['exists'] = True
+        else:
+
+            query = f"""  insert into users (name,email,country_code,phone,status,is_complete) values('{name}','{email}','91','{phone}',1,1) """  # Use parameterized query to prevent SQL injection
+            print(query)
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+            query = "SELECT * FROM users WHERE phone = %s"  # Use parameterized query to prevent SQL injection
+
+            with connection.cursor() as cursor:
+                cursor.execute(query, [phone])
+                result = cursor.fetchone()  # Get the first matching row
+            context['ID'] = result[0]
+            context['phone'] = phone  # Keep the phone number in the form for user reference
+
+    return render(request, 'addnewscheme.html', context)
+
+
+def addnewschemedetails(request):
+    if request.method == 'POST':
+        try:
+            # Get data from POST request
+            user_id = request.POST.get('user_id')
+            address = request.POST.get('address')
+            document = request.POST.get('document')  # Not used, remove if unnecessary
+            relation = request.POST.get('relation')  # Not used, remove if unnecessary
+            types = request.POST.get('type')
+            dates = request.POST.get('date')
+            gold_rate = request.POST.get('gold_rate')
+            amount = request.POST.get('amount')
+            name = request.POST.get('name1')
+            payment_method = request.POST.get('payment_method')
+            branchid = request.user.branchid
+
+            # Validate required fields
+            if not (user_id and address and types and dates and gold_rate and amount and name and payment_method):
+                return HttpResponse("Missing required fields.", status=400)
+
+            # Calculate derived values
+            grate = int(gold_rate)
+            amt = int(amount)
+            gtt = math.trunc((amt / grate) * 1000) / 1000
+            wt = gtt
+
+            # Generate scheme_id and transaction_id
+            scheme_id = generate_unique_scheme_id()
+            tid = f"{payment_method}_{random.randint(1, 100000)}"
+
+            # Calculate dates
+            start_date = datetime.strptime(dates, "%Y-%m-%d")
+            next_due = start_date + relativedelta(months=1)
+            scheme_end_date = start_date + relativedelta(months=10)
+
+            # Format dates for SQL
+            start_date_str = start_date.strftime('%Y-%m-%d')
+            next_due_str = next_due.strftime('%Y-%m-%d')
+            scheme_end_date_str = scheme_end_date.strftime('%Y-%m-%d')
+
+            # Insert into user_kycs
+            if not searchrecord(user_id):
+
+                user_kyc_query = """
+                INSERT INTO user_kycs (user_id, name, address, type, status)
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(user_kyc_query, [user_id, name, address, types, 0])
+
+            # Insert into gold_scheme_masters
+            gold_scheme_master_query = """
+                INSERT INTO gold_scheme_masters 
+                (user_id, scheme_id, amount_accumulated, gold_accumulated, last_reduced, total_gold_weight, 
+                 order_id, total_amount_accumulated, purchased_amount, branch_id, refund, discount_percentage, 
+                 status, scheme_peroid, start_date, next_due, scheme_end_date, erp_scheme_id)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(gold_scheme_master_query, [
+                    user_id, scheme_id, amt, wt, 0, wt, 0, amt, 0, branchid, 0, 3.5, 1, 10,
+                    start_date_str, next_due_str, scheme_end_date_str, ''
+                ])
+
+            # Get the newly inserted gold_scheme_masters ID
+            get_scheme_id_query = """
+                SELECT id FROM gold_scheme_masters WHERE user_id=%s AND scheme_id=%s
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(get_scheme_id_query, [user_id, scheme_id])
+                result = cursor.fetchone()
+                if not result:
+                    return HttpResponse("Failed to retrieve scheme ID.", status=500)
+
+                scheme_master_id = result[0]
+
+            # Insert into gold_scheme_details
+            gold_scheme_details_query = """
+                INSERT INTO gold_scheme_details 
+                (scheme_master_id, amount, gold_weight, gold_rate, status, payment_status, 
+                 raz_order_id, transaction_id, next_due, `current_date`, payment_mode, payment_method)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(gold_scheme_details_query, [
+                    scheme_master_id, amt, wt, grate, 1, 1, payment_method, tid,
+                    next_due_str, start_date_str, 1, payment_method
+                ])
+
+            # Return success page
+            return HttpResponse("""
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Thank You</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                </head>
+                <body>
+                    <div class="container d-flex align-items-center justify-content-center vh-100">
+                        <div class="text-center">
+                            <div class="mb-4">
+                                <img src="https://via.placeholder.com/150" alt="Thank You" class="img-fluid rounded-circle">
+                            </div>
+                            <h1 class="display-4 text-success">Thank You!</h1>
+                            <p class="lead">New Scheme processed successfully.</p>
+                            <p class="text-muted">We appreciate your trust in our services.</p>
+                            <a href="/" class="btn btn-primary mt-3">Close</a>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            """)
+
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {str(e)}", status=500)
+
+def generate_unique_scheme_id():
+    scheme_id = ""
+    is_unique = False
+
+    while not is_unique:
+        # Generate a random scheme ID in the format "JS_O_XXXXXXXX" where X is a random 8-digit number
+        scheme_id = f"JS_O_{random.randint(0, 99999999):08d}"
+
+        # Check if the generated scheme ID already exists in the database
+        query = "SELECT COUNT(*) FROM gold_scheme_masters WHERE scheme_id = %s"
+        with connection.cursor() as cursor:
+            cursor.execute(query, [scheme_id])
+            count = cursor.fetchone()[0]
+
+        # If count is 0, the scheme ID is unique
+        if count == 0:
+            is_unique = True
+
+    return scheme_id
+
+
+
+def searchrecord(user_id):
+    query = "SELECT COUNT(*) FROM user_kycs WHERE user_id = %s"
+    with connection.cursor() as cursor:
+        cursor.execute(query, [user_id])
+        count = cursor.fetchone()[0]
+    if count == 0:
+        is_unique = True
+    else:
+        is_unique = False
+    return(is_unique)
+
+
+
+def indsoftintegration(request):
+    return render(request, 'indsoftintegration.html')
