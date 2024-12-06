@@ -1,0 +1,27 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+
+    name: Deploying to Server
+    runs-on: ubuntu-latest
+    environment: master
+    steps:
+            - name: Git Pull
+              uses: appleboy/ssh-action@v1.0.0
+              with:
+                host: ${{ secrets.AWS_HOST }}
+                username: ${{ secrets.AWS_USER }}
+                key: ${{ secrets.AWS_KEY }}
+                port: ${{ secrets.AWS_PORT }}
+                script: |
+                      cd /var/www/python-project/joscoonlinetest/joscoonline/
+                      git pull
+                      sudo service apache2 restart
+                debug: true
