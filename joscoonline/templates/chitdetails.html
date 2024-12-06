@@ -1,0 +1,358 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block content %}
+<script>
+        function closePage() {
+            // Add logic if needed to confirm before closing
+            window.open('', '_self', ''); // Required for compatibility
+            window.close();
+        }
+    </script>
+
+
+<style>
+    /* Custom styling for tabs */
+    .card-header-tabs .nav-link {
+      border-radius: 5px; /* Small border-radius for rounded corners */
+      padding: 10px 20px;
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 16px;
+    }
+    .card-header-tabs .nav-link.active {
+      background-color: red;
+      color: #fff;
+      font-weight: bold;
+    }
+    .card-header-tabs .nav-link:hover {
+      background-color:danger;
+      color: #fff;
+    }
+    .card-body {
+      padding: 30px;
+      background-color: #f8f9fa;
+    }
+    .tab-pane h5 {
+      font-size: 24px;
+      color: #343a40;
+      margin-bottom: 15px;
+    }
+    .tab-pane p {
+      font-size: 18px;
+      color: #6c757d;
+    }
+    /* Square button with pale green color */
+    .btn-primary {
+      border-radius: 5px; /* Small rounded corners */
+      background-color: #98fb98; /* Pale green */
+      color: #000; /* Dark text color for contrast */
+      border: none; /* Remove border */
+      padding: 10px 25px; /* Adequate padding */
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    .btn-primary:hover {
+      background-color: #66c466; /* Darker green on hover */
+    }
+
+    .table {
+      border-radius: 8px; /* Rounded corners */
+      overflow: hidden; /* To ensure the table content stays inside rounded corners */
+      margin-top: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    }
+
+    /* Styling table header */
+    .table th {
+      background-color: cornsilk; /* Blue header */
+      color: black;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    /* Styling table rows */
+    .table td {
+      font-size: 16px;
+      color: #495057;
+      padding: 12px 15px;
+    }
+
+    /* Alternate row color */
+    .table tbody tr:nth-child(odd) {
+      background-color: #f8f9fa;
+    }
+
+    .table tbody tr:hover {
+      background-color: #e9ecef; /* Light grey on hover */
+      transition: background-color 0.3s ease;
+    }
+
+    /* Right-align text for Amount, GoldWt, and Rate */
+    .text-end {
+      text-align: right;
+    }
+
+    /* Responsive table */
+    @media (max-width: 767px) {
+      .table thead {
+        display: none; /* Hide headers on small screens */
+      }
+      .table tbody td {
+        display: block;
+        text-align: right;
+      }
+      .table tbody td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: inline-block;
+        text-align: left;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container my-5">
+    <div class="card shadow-lg">
+      <div class="card-header bg-light">
+        <ul class="nav nav-tabs card-header-tabs justify-content-center" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">
+              <i class="bi bi-cash-coin"></i> Payment Details
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">
+              <i class="bi bi-person-fill"></i> Profile
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false">
+              <i class="bi bi-gear-fill"></i> Settings
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+
+             <div class="container ">
+
+      <table class="table table-bordered mx-auto">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Payment Method</th>
+            <th scope="col" class="text-end">Amount</th>
+            <th scope="col" class="text-end">Gold Wt</th>
+            <th scope="col" class="text-end">Rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for k in sdata %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ k.start_date }}</td>
+            <td>{{ k.transid }}</td>
+            <td class="text-end">{{ k.amount }}</td>
+            <td class="text-end">{{ k.goldweight }}</td>
+            <td class="text-end">{{ k.goldrate }}</td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+        <tr >
+          <B>
+            <td colspan="3" style="color: red; font-weight: bold;">Total </td>
+             <td class="text-end red" style="color: red; font-weight: bold;">{{totalamt}} </td>
+             <td class="text-end" style="color: red; font-weight: bold;">{{totalwt}} </td></B>
+          </tr>
+      </table>
+
+  </div>
+
+        </div>
+        <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+         <div class="container">
+  <div class="row">
+    <!-- Profile Card (Card 1) -->
+    <div class="col-md-6 mb-3">
+      <div class="card p-5">
+        <div class="d-flex align-items-center">
+          <img src="{% static 'images/profile.png' %}" class="rounded-circle" alt="Profile Picture" style="width: 100px; height: 100px; object-fit: cover; margin-right: 20px;">
+          <div>
+            {% for j in mdata %}
+            <h5 class="card-title">{{j.name}}    <i
+        class="bi bi-bookmark-heart-fill"
+        style="color: {% if j.status == '1' %} green {% else %}red{% endif %};">
+    </i> </h5>
+            <h6 class="card-title">{{j.phone}}</h6>
+            <p class="card-text">{{ j.address }} </p>
+              <hr>
+
+              <p class="card-text">{{ j.nomineeinfo }}</p>
+
+              <hr>
+              <h6 class="card-title">Document   : {{j.type}}</h6>
+              <hr>
+            <p class="card-text"><small class="text-muted">Joined {{j.monthdif}} Months ago</small></p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standard Card (Card 2) -->
+    <div class="col-md-6 mb-3">
+      <div class="card p-5">
+
+         <div>
+            {% for j in mdata %}
+                <h6 class="card-title">Start Date     :   {{j.start_date}}</h6>
+                <h6 class="card-title">End   Date     :   {{j.end_date}}</h6>
+                <h6 class="card-title">Scheme Period  :   {{j.period}} Months</h6>
+             <hr>
+               <h6 class="card-title">Closing Date  :   {{j.closingdate}}</h6>
+             <h6 class="card-title">Invoice Number  :   {{j.invoice}}</h6>
+<!--           # <p class="card-text"><small class="text-muted">Joined 2 years ago</small></p>-->
+            {% endfor %}
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+ <div class="card-body tab-content" id="myTabContent1">
+    <div class="container">
+        <!-- Shadow Round Box -->
+        <div class="card shadow-lg rounded p-4">
+            <h4>Add New Payment</h4>
+
+            <!-- Form Fields in a Single Row -->
+            <form method="POST" action=" {% url 'addpayment'  %}" id="paymentForm">
+                {% csrf_token %}
+                <div class="row g-3 align-items-center">
+                    <!-- Date Field -->
+                    <div class="col-md-2">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+
+                    <!-- Gold Rate Field -->
+                    <div class="col-md-2">
+                        <label for="gold_rate" class="form-label">Gold Rate</label>
+                        <input type="number" id="gold_rate" name="gold_rate" class="form-control" step="1" required>
+
+                    </div>
+
+                    <!-- Amount Field -->
+                    <div class="col-md-2">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" id="amount" name="amount" class="form-control" required>
+                    </div>
+
+                    <!-- Payment Method Dropdown -->
+                    <div class="col-md-2">
+                        <label for="payment_method" class="form-label">Payment Method</label>
+                        <select id="payment_method" name="payment_method" class="form-select" required>
+                            <option value="1">Cash</option>
+                            <option value="2">UPI</option>
+                            <option value="3">Card</option>
+                            <option value="4">Net Banking</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="schemeID" value="{{schemeID}}">
+                    <!-- Submit Button -->
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#confirmationModal">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to proceed with the payment?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmPaymentBtn">Yes, Proceed</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+  <script>
+    // Function to set today's date in 'YYYY-MM-DD' format
+    function setDefaultDate() {
+        const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        document.getElementById('date').value = today;
+
+    }
+
+    // Call the function when the page loads
+    window.onload = setDefaultDate;
+
+
+
+</script>
+
+
+
+
+
+<script>
+    // Handle the confirmation button click
+    document.getElementById('confirmPaymentBtn').addEventListener('click', function() {
+        // Close the modal
+        var myModal = new bootstrap.Modal(document.getElementById('confirmationModal'));
+        myModal.hide();
+
+        // Submit the form after confirmation
+        document.getElementById('paymentForm').submit();
+<!--        setTimeout(function() { // Add a slight delay to ensure form submission begins-->
+<!--            window.open('', '_self', ''); // Required for compatibility-->
+<!--            window.close();-->
+<!--        }, 10); // Adjust the delay as needed-->
+    });
+</script>
+
+</div>
+</div>
+</div>
+  </div>
+</body>
+{% endblock %}
