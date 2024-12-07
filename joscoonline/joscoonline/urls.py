@@ -21,15 +21,18 @@ from django.conf.urls.static import static
 from joscoonline_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path ('',views.home,name="home"),
+    path ('',views.home,name="login"),
     path('login',views.login_user,name="login"),
+    path('logout', views.user_logout, name="logout"),
+    path('closechit', views.closechit, name="closechit"),
 path('scheme',views.scheme,name="scheme"),
     path('chitdetails/<str:id>/',views.chitdetails,name="chitdetails"),
     path('addpayment', views.addpayment, name="addpayment"),
     path('addnewscheme', views.addnewscheme, name="addnewscheme"),
     path('addnewschemedetails', views.addnewschemedetails, name="addnewschemedetails"),
     path('indsoftintegration', views.indsoftintegration, name='indsoftintegration'),
-    path('web/<str:cust_code>/<int:chit_key>/', views.webupdate, name='webupdate'),
+    path('webupdate/<str:cust_code>/<int:chit_key>/', views.webupdate, name='webupdate'),
+    path('adduser', views.adduser, name="adduser"),
     # re_path(
     #     r'^indsoftintegration(?:/(?P<cust_code>[^/]*)/(?P<chit_key>[0-9]*)/)?$',
     #     views.indsoftintegration,
