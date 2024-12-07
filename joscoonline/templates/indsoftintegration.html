@@ -33,9 +33,8 @@
         <div class="me-3">
             <label for="report" class="form-label mb-1">Report Type</label>
             <select id="report" name="report" class="form-select">
-                <option value="1">Joining Report</option>
-                <option value="2">Payment Report</option>
-                <option value="3">Closed Report</option>
+                <option value="1">Payment Details</option>
+                <option value="2">Closed Report</option>
             </select>
         </div>
 
@@ -44,11 +43,15 @@
             <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
                 Display
             </button>
+
+
         </div>
 
 
 
     </form>
+
+
 </div>
 
 
@@ -73,12 +76,31 @@
                 <td>{{ k.phone }}</td>
                 <td>{{ k.cust_code }}</td>
                 <td>
-                    <a href="{% url 'webupdate' k.cust_code k.chit_key|floatformat:0 %}" class="btn btn-primary">
-                        Update to Web
-                    </a>
+                    <form action="{% url 'webupdate' k.cust_code k.chit_key|floatformat:0 %}" method="POST">
+                    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">
+        Update to Web
+    </button>
+</form>
                 </td>
             </tr>
             {% endfor %}
+            <tr>
+        <td colspan="2">
+             <div class="me-3">
+                   <form method="POST" action="{% url 'closechit' %}" class="d-flex flex-wrap align-items-center border rounded shadow p-3">
+            {% csrf_token %}
+             <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+               Close All Schemes
+             </button>
+                   </form>
+
+        </div>
+
+
+
+        </td>
+        </tr>
         </tbody>
     </table>
 </div>
@@ -101,3 +123,4 @@
 
 
 {% endblock %}
+</body>

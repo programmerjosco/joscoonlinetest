@@ -14,7 +14,8 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = 600
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -24,8 +25,7 @@ SECRET_KEY = 'django-insecure-uj6kvopn3i92venue86bnt4s==nq6*5oj(o$t1$03*+-5-mk0d
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -93,6 +93,18 @@ DATABASES = {
         'PASSWORD': 'INDSOFTJMS_DATA',                      # MSSQL password
         'HOST': '192.168.18.2',              # MSSQL server address
         'PORT': '1433',                      # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+
+    '10': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR8',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
         },
