@@ -109,6 +109,207 @@ DATABASES = {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
         },
     },
+
+    '49': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR29',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '52': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR32',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '53': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR33',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '54': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR34',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '55': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR35',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '58': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR37',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '60': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR39',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '61': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR40',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '62': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR41',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '63': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR42',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '64': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR43',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '65': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR44',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '66': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR45',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '67': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR46',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '68': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR47',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '4': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR1',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '5': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR2',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+    '9': {
+        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'NAME': 'SCMJOSJMSBR7',  # Your MSSQL database name
+        'USER': 'sa',  # MSSQL username
+        'PASSWORD': '',  # MSSQL password
+        'HOST': '192.168.13.2',  # MSSQL server address
+        'PORT': '1433',  # MSSQL port
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+        },
+    },
+
+
 }
 
 AUTH_USER_MODEL = 'joscoonline_app.CustomUser'
