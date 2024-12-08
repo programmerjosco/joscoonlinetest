@@ -75,7 +75,7 @@ def user_logout(request):
 
 def scheme(request):
     if not request.user.is_authenticated:
-        return HttpResponse("Unauthorized", status=401)
+        return redirect('login')
 
     branchid = request.user.branchid
     branchname = "Unknown Branch"  # Default value for branch name
@@ -168,7 +168,7 @@ def scheme(request):
             'erp_scheme_id': row[4],
             'payment_method':row[4],
             'amount': row[5],
-            'goldweight': row[6],
+            'goldweight': "{:.3f}".format(math.trunc(float(row[6]) * 1000) / 1000),
             'goldrate': row[7],
             'start_date': row[8].strftime('%d/%m/%Y'),
         }
@@ -176,7 +176,7 @@ def scheme(request):
     ]
 
     # Calculate totals
-    total_amt = sum(int(item['amount']) for item in data)
+    total_amt =  sum(int(float(item['amount'])) for item in data)
     total_wt = sum(float(item['goldweight']) for item in data)
 
     # Prepare context and render
@@ -305,7 +305,7 @@ def chitdetails(request, id):
                 })
 
         # Totals
-        total_amt = sum(int(item.get('amount', 0)) for item in data)
+        total_amt = sum(int(float(item.get('amount'))) for item in data)
         total_wt = sum(float(item['goldweight']) for item in data)
 
         # Context for rendering
@@ -800,7 +800,7 @@ def webupdate(request, cust_code=None, chit_key=None):
                                     ELSE 4 
                                 END
                             WHEN trx_type = 'B' THEN 4 
-                            ELSE 5 
+                            ELSE 4 
                         END AS Trx, serial_no 
                     FROM chitrcpt 
                     WHERE chit_key = %s
@@ -818,8 +818,8 @@ def webupdate(request, cust_code=None, chit_key=None):
                             next_due_str = next_due_date.strftime("%Y-%m-%d")
 
                             cdate = datetime.strptime(row1[1], "%d/%m/%Y")
-                            cdates= cdate + relativedelta(months=1)
-                            cdt= cdates.strftime("%Y-%m-%d")
+
+                            cdt= cdate.strftime("%Y-%m-%d")
 
 
 
@@ -898,7 +898,7 @@ def webupdate(request, cust_code=None, chit_key=None):
                                     ELSE 4 
                                 END
                             WHEN trx_type = 'B' THEN 4 
-                            ELSE 5 
+                            ELSE 4 
                         END AS Trx ,serial_no
                     FROM chitrcpt 
                     WHERE chit_key = %s
@@ -916,8 +916,8 @@ def webupdate(request, cust_code=None, chit_key=None):
                             next_due_str = next_due_date.strftime("%Y-%m-%d")
 
                             cdate = datetime.strptime(row1[1], "%d/%m/%Y")
-                            cdates = cdate + relativedelta(months=1)
-                            cdt = cdates.strftime("%Y-%m-%d")
+
+                            cdt = cdate.strftime("%Y-%m-%d")
 
                             query = f"""
                                                        INSERT INTO gold_scheme_details 
