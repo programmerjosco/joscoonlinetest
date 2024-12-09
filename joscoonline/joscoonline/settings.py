@@ -302,7 +302,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR7',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.11.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
