@@ -87,7 +87,8 @@ DATABASES = {
         },
     },
     '46': {
-        'ENGINE': 'mssql',     # Correct MSSQL backend for Django
+        # 'ENGINE': 'MSSQL',     # Correct MSSQL backend for Django
+        'ENGINE': 'sql_server.pyodbc',  # Engine for MSSQL
         'NAME': 'SCMJOSJMSBR25',              # Your MSSQL database name
         'USER': 'scmjosco',                        # MSSQL username
         'PASSWORD': 'INDSOFTJMS_DATA',                      # MSSQL password
@@ -95,11 +96,12 @@ DATABASES = {
         'PORT': '1433',                      # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+            'extra_params': 'TrustServerCertificate=yes',  # Optional, to avoid certificate errors if needed
         },
     },
 
     '10': {
-        'ENGINE': 'mssql',  # Correct MSSQL backend for Django
+        'ENGINE': 'sql_server.pyodbc',#orrect MSSQL backend for Django
         'NAME': 'SCMJOSJMSBR8',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
@@ -107,6 +109,7 @@ DATABASES = {
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+            'extra_params': 'TrustServerCertificate=yes',  # Optional, to avoid certificate errors if needed
         },
     },
 
@@ -118,7 +121,8 @@ DATABASES = {
         'HOST': '192.168.13.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
+            'driver': 'ODBC Driver 17 for SQL Server',
+            # Ensure driver is installed
         },
     },
     '52': {
