@@ -87,19 +87,23 @@
             {% endfor %}
             <tr>
         <td colspan="2">
-             <div class="me-3">
-                   <form method="POST" action="{% url 'closechit' %}" class="d-flex flex-wrap align-items-center border rounded shadow p-3">
-            {% csrf_token %}
-             <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
-               Close All Schemes
-             </button>
-                   </form>
-
-        </div>
-
-
-
-        </td>
+  <div class="d-flex justify-content-start align-items-center">
+    <form id="f2" method="POST" action="{% url 'closechit' %}" class="d-flex align-items-center border rounded shadow me-3 p-2">
+      {% csrf_token %}
+          <input type="hidden" id="start_date_hidden" name="start_date2" class="form-control">
+         <input type="hidden" id="end_date_hidden" name="end_date2" class="form-control">
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+        Close All Schemes
+      </button>
+    </form>
+    <form method="POST" action="{% url 'webupdateall' %}" class="d-flex align-items-center border rounded shadow p-2">
+      {% csrf_token %}
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+        Upload to Web -All
+      </button>
+    </form>
+  </div>
+</td>
         </tr>
         </tbody>
     </table>
@@ -117,6 +121,19 @@
 
     // Call the function when the page loads
     window.onload = setDefaultDate;
+
+
+    document.getElementById('f2').onsubmit = function() {
+        // Get the value of the start_date input
+        var startDate = document.getElementById('start_date').value;
+        var endDate = document.getElementById('end_date').value;
+
+        // Set the value of the hidden input field in the second form
+        document.getElementById('start_date_hidden').value = startDate;
+         document.getElementById('end_date_hidden').value = endDate;
+
+    };
+
 </script>
 
 
