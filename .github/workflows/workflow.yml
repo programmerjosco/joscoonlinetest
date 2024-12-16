@@ -21,7 +21,15 @@ jobs:
                 key: ${{ secrets.AWS_KEY }}
                 port: ${{ secrets.AWS_PORT }}
                 script: |
-                      cd /var/www/python-project/joscoonlinetest/joscoonline/
+                      cd /var/www/python-project/joscoonlinetest/
                       git pull
+                      cd /var/www/python-project/joscoonlinetest/joscoonline
+                      # Activate the environment on the server (if applicable)
+                      source venv/bin/activate
+                      # Run migrations (if needed)
+                      python manage.py migrate
+                      # Collect static files (if applicable)
+                      python manage.py collectstatic --noinput
+                      # Restart server
                       sudo service apache2 restart
                 debug: true
