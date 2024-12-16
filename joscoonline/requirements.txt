@@ -1,0 +1,12 @@
+asgiref==3.8.1
+Django==4.2.17
+django-mssql-backend==2.8.1
+mssql-django==1.5
+mysqlclient==2.2.6
+pyodbc==5.2.0
+python-dateutil==2.9.0.post0
+pytz==2024.2
+six==1.16.0
+sqlparse==0.5.2
+tzdata==2024.2
+
