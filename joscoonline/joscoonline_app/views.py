@@ -858,7 +858,7 @@ def webupdate(request, cust_code=None, chit_key=None):
                     WHERE erp_scheme_id = %s AND branch_id = %s
                     """
                     with connection.cursor() as cursor:
-                        cursor.execute(query, [amt, gwt, gwt, amt, cust_code, branchid])
+                        cursor.execute(query, [amt, int(gwt * 1000) / 1000, int(gwt * 1000) / 1000, amt, cust_code, branchid])
                     return HttpResponse("""
                                                            <!DOCTYPE html>
                                                            <html lang="en">
@@ -955,7 +955,7 @@ def webupdate(request, cust_code=None, chit_key=None):
                                                WHERE erp_scheme_id = %s AND branch_id = %s
                                                """
                         with connection.cursor() as cursor:
-                            cursor.execute(query, [amt, gwt, gwt, amt, cust_code, branchid])
+                            cursor.execute(query, [amt, int(gwt * 1000) / 1000, int(gwt * 1000) / 1000, amt, cust_code, branchid])
 
                         return HttpResponse("""
                                         <!DOCTYPE html>
@@ -1053,13 +1053,26 @@ def closechit(request):
         end_date1 = request.POST.get('end_date1', datetime.today().strftime('%m-%d-%Y'))
         edate = request.POST.get('end_date2', datetime.today().strftime('%m/%d/%Y'))
 
+        sdate = datetime.strptime( sdate, "%Y-%m-%d")
+
+        # Format to MM/DD/YYYY
+        sdate = sdate.strftime("%m/%d/%Y")
+
+        edate = datetime.strptime(edate, "%Y-%m-%d")
+
+        # Format to MM/DD/YYYY
+        edate = edate.strftime("%m/%d/%Y")
+
+
+
+
         query = f"""
             SELECT CUST_CODE, CHITMAST.Chit_Key, Payed, CASH, CHKAMT, CHKNO, Ref_NO,ref_date
             FROM CHITMAST, CHITCLOSE
             WHERE CHITMAST.Chit_Key = CHITCLOSE.Chit_Key
             AND convert(datetime,Ref_Date,103) BETWEEN   '{sdate}' AND '{edate}'
         """
-
+        MN=0
         try:
             with connections[cn].cursor() as cursor1:
                 cursor1.execute(query)
@@ -1127,7 +1140,7 @@ def closechit(request):
                                 WHERE erp_scheme_id = %s AND branch_id = %s
                             """
                             with connection.cursor() as cursor1:
-                                cursor1.execute(update_query, [amt, gwt, gwt, amt, row[0], branchid])
+                                cursor1.execute(update_query, [amt, int(gwt * 1000) / 1000, int(gwt * 1000) / 1000, amt, row[0], branchid])
 
                         # Update the status of the scheme
 
@@ -1163,32 +1176,32 @@ def closechit(request):
                         formatted_start_date =   date_obj.strftime("%Y-%m-%d")
                         with connection.cursor() as cursor:
                             cursor.execute(update_status_query, [ formatted_start_date, details, row[0], branchid])
-
+                        MN=MN+1
                     # Return a success response after all rows are processed
-                    return HttpResponse("""
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <title>Thank You</title>
-                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-                        </head>
-                        <body>
-                            <div class="container d-flex align-items-center justify-content-center vh-100">
-                                <div class="text-center">
-                                    <div class="mb-4">
-                                        <img src="https://via.placeholder.com/150" alt="Thank You" class="img-fluid rounded-circle">
-                                    </div>
-                                    <h1 class="display-4 text-success">Thank You!</h1>
-                                    <p class="lead">All schemes closed successfully for today.</p>
-                                    <p class="text-muted">We appreciate your trust in our services.</p>
-                                    <a href="javascript:history.back()" class="btn btn-primary mt-3">Close</a>
-                                </div>
-                            </div>
-                        </body>
-                        </html>
-                    """)
+                    return HttpResponse(f"""
+                                    <!DOCTYPE html>
+                                    <html lang="en">
+                                    <head>
+                                        <meta charset="UTF-8">
+                                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                        <title>Thank You</title>
+                                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                                    </head>
+                                    <body>
+                                        <div class="container d-flex align-items-center justify-content-center vh-100">
+                                            <div class="text-center">
+                                                <div class="mb-4">
+                                                    <img src="https://via.placeholder.com/150" alt="Thank You" class="img-fluid rounded-circle">
+                                                </div>
+                                                <h1 class="display-4 text-success">Thank You!</h1>
+                                                <p class="lead">{MN} Schemes Closed successfully.</p>
+                                                <p class="text-muted">We appreciate your trust in our services.</p>
+                                                <a href="javascript:window.history.back();" class="btn btn-primary mt-3">Close</a>
+                                            </div>
+                                        </div>
+                                    </body>
+                                    </html>
+                                """)
                 else:
                     # If no records found, return a message
                     return HttpResponse("No records found for the given date range.", status=404)
@@ -1201,10 +1214,23 @@ def closechit(request):
 def webupdateall(request):
     if request.POST:
         branchid = request.user.branchid
-        start_date1 = request.POST.get('start_date1', date.today().strftime('%m-%d-%Y'))
-        sdate = request.POST.get('start_date1', date.today().strftime('%d-%m-%Y'))
-        end_date1 = request.POST.get('end_date1', date.today().strftime('%m-%d-%Y'))
-        edate = request.POST.get('end_date1', date.today().strftime('%d-%m-%Y'))
+        sdate = request.POST.get('start_date3', datetime.today().strftime('%m/%d/%Y'))
+        edate = request.POST.get('end_date3', datetime.today().strftime('%m/%d/%Y'))
+
+        # Parse dates based on their current format (assuming they might be in '%Y-%m-%d')
+        try:
+            sdate_obj = datetime.strptime(sdate, "%Y-%m-%d")  # Parse as YYYY-MM-DD
+        except ValueError:
+            sdate_obj = datetime.strptime(sdate, "%m/%d/%Y")  # Fallback to MM/DD/YYYY
+
+        try:
+            edate_obj = datetime.strptime(edate, "%Y-%m-%d")  # Parse as YYYY-MM-DD
+        except ValueError:
+            edate_obj = datetime.strptime(edate, "%m/%d/%Y")  # Fallback to MM/DD/YYYY
+
+        # Format back to MM/DD/YYYY
+        sdate = sdate_obj.strftime("%m/%d/%Y")
+        edate = edate_obj.strftime("%m/%d/%Y")
 
         #try:
         cn = str(branchid)  # Assuming 'ekm' is the connection alias
@@ -1237,12 +1263,13 @@ def webupdateall(request):
                 JOIN CHITCUSTMAST ccm ON cm.ccust_key = ccm.CCust_key
                 JOIN chitrcpt crp ON crp.chit_key = cm.chit_key
                 WHERE cm.close_flag = 'N' 
-                AND CONVERT(DATETIME, vch_date, 103) BETWEEN '{start_date1}' AND '{end_date1}' and crp.serial_no not in (select id from CHITRCPTID where id is not null)
+                AND CONVERT(DATETIME, vch_date, 103) BETWEEN '{sdate}' AND '{edate}' and crp.serial_no not in (select id from CHITRCPTID where id is not null)
                 ORDER BY cm.chit_key
                        """
+
             cursor1.execute(query)
             g=cursor1.fetchall()
-
+            MN=0
             if g:
 
                         for ro in g:
@@ -1430,31 +1457,31 @@ def webupdateall(request):
                                                        """
                                             with connection.cursor() as cursor1:
                                                 cursor1.execute(query, [amt, gwt, gwt, amt, cust_code, branchid])
-
-            return HttpResponse("""
-                                                        <!DOCTYPE html>
-                                                        <html lang="en">
-                                                        <head>
-                                                            <meta charset="UTF-8">
-                                                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                                                            <title>Thank You</title>
-                                                            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-                                                        </head>
-                                                        <body>
-                                                            <div class="container d-flex align-items-center justify-content-center vh-100">
-                                                                <div class="text-center">
-                                                                    <div class="mb-4">
-                                                                        <img src="https://via.placeholder.com/150" alt="Thank You" class="img-fluid rounded-circle">
-                                                                    </div>
-                                                                    <h1 class="display-4 text-success">Thank You!</h1>
-                                                                    <p class="lead">All Scheme closed  successfully for Today.</p>
-                                                                    <p class="text-muted">We appreciate your trust in our services.</p>
-                                                                    <a href="javascript:window.history.back(); " class="btn btn-primary mt-3">Close</a>
-                                                                </div>
-                                                            </div>
-                                                        </body>
-                                                        </html>
-                                                    """)
+                        MN=MN+1
+            return HttpResponse(f"""
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Thank You</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+                </head>
+                <body>
+                    <div class="container d-flex align-items-center justify-content-center vh-100">
+                        <div class="text-center">
+                            <div class="mb-4">
+                                <img src="https://via.placeholder.com/150" alt="Thank You" class="img-fluid rounded-circle">
+                            </div>
+                            <h1 class="display-4 text-success">Thank You!</h1>
+                            <p class="lead">{MN} Schemes Updated or Inserted successfully.</p>
+                            <p class="text-muted">We appreciate your trust in our services.</p>
+                            <a href="javascript:window.history.back();" class="btn btn-primary mt-3">Close</a>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            """)
         # except Exception as e:
         #     print(f"Connection failed: {e}")
         # # Ensure that the view returns an HttpResponse even in case of an exception

@@ -96,8 +96,11 @@
         Close All Schemes
       </button>
     </form>
-    <form method="POST" action="{% url 'webupdateall' %}" class="d-flex align-items-center border rounded shadow p-2">
+    <form id="f3" method="POST" action="{% url 'webupdateall' %}" class="d-flex align-items-center border rounded shadow p-2">
       {% csrf_token %}
+        <input type="hidden" id="start_date_hidden1" name="start_date3" class="form-control">
+         <input type="hidden" id="end_date_hidden1" name="end_date3" class="form-control">
+
       <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
         Upload to Web -All
       </button>
@@ -133,6 +136,19 @@
          document.getElementById('end_date_hidden').value = endDate;
 
     };
+
+
+     document.getElementById('f3').onsubmit = function() {
+        // Get the value of the start_date input
+        var startDate = document.getElementById('start_date').value;
+        var endDate = document.getElementById('end_date').value;
+
+        // Set the value of the hidden input field in the second form
+
+        document.getElementById('start_date_hidden1').value = startDate;
+         document.getElementById('end_date_hidden1').value = endDate;
+    };
+
 
 </script>
 
