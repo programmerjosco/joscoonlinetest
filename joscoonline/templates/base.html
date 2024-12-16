@@ -132,8 +132,8 @@
             Gold Scheme
           </a>
           <ul class="dropdown-menu shadow-lg" aria-labelledby="goldSchemeDropdown">
-            <li><a class="dropdown-item" href="{% url 'addnewscheme' %}">New Scheme</a></li>
-            <li><a class="dropdown-item" href="{% url 'indsoftintegration' %}">Indsoft Integration</a></li>
+<!--            <li><a class="dropdown-item" href="{% url 'addnewscheme' %}">New Scheme</a></li>-->
+<!--            <li><a class="dropdown-item" href="{% url 'indsoftintegration' %}">Indsoft Integration</a></li>-->
             {% if user.is_superuser %}
     <li><a class="dropdown-item" href="{% url 'adduser' %}">Add New User</a></li>
               <li><a class="dropdown-item" href="{% url 'chitsummary' %}">Summary</a></li>
@@ -165,14 +165,13 @@
         {% endif %}
 
         <!-- Blog Link -->
+          {% if user.is_superuser %}
         <li class="nav-item">
-          <a href="blog.html" class="nav-link px-3 py-2 rounded-lg transition-all hover-effect">Blog</a>
+          <a href="{% url 'chitsummary' %}" class="nav-link px-3 py-2 rounded-lg transition-all hover-effect">Summary Reports</a>
         </li>
-
+    {% endif %}
         <!-- Contact Link -->
-        <li class="nav-item">
-          <a href="contact.html" class="nav-link px-3 py-2 rounded-lg transition-all hover-effect">Contact</a>
-        </li>
+
       </ul>
 
       <!-- Welcome User Message -->
