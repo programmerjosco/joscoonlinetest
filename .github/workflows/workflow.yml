@@ -21,7 +21,28 @@ jobs:
                 key: ${{ secrets.AWS_KEY }}
                 port: ${{ secrets.AWS_PORT }}
                 script: |
-                      cd /var/www/python-project/joscoonlinetest/joscoonline/
+                      # Navigate to the project directory
+                      cd /var/www/python-project/joscoonlinetest/
+
+                      # Pull the latest changes from the repository
                       git pull
+
+                      # Navigate to the virtual environment directory (if not already there)
+                      cd /var/www/python-project/joscoonlinetest/joscoonline/
+
+                      # Activate the virtual environment (assuming it's named 'venv')
+                      source venv/bin/activate
+                      
+                      # Install or update dependencies from requirements.txt
+                      pip install --upgrade -r /var/www/python-project/joscoonlinetest/joscoonline/requirements.txt
+                      
+                      # Run Django migrations
+                      python /var/www/python-project/joscoonlinetest/joscoonline/manage.py migrate
+                      
+                      # Collect static files (if needed)
+                      python /var/www/python-project/joscoonlinetest/joscoonline/manage.py collectstatic --noinput
+                      
+                      # Restart Apache to apply changes
                       sudo service apache2 restart
+
                 debug: true
