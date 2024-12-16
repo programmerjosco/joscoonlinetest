@@ -6,8 +6,11 @@
 <style>
   /* Adjust the height of the navbar */
   #ftco-navbar {
-    height: 100px; /* Set desired navbar height */
-    padding: 0; /* Remove extra padding */
+    position: sticky;
+  top: 0;
+  z-index: 1000;  /* Ensures it stays on top of other content */
+  height: 100px;
+  padding: 0;
   }
 
   /* Ensure the logo aligns well within the navbar */
@@ -133,6 +136,7 @@
             <li><a class="dropdown-item" href="{% url 'indsoftintegration' %}">Indsoft Integration</a></li>
             {% if user.is_superuser %}
     <li><a class="dropdown-item" href="{% url 'adduser' %}">Add New User</a></li>
+              <li><a class="dropdown-item" href="{% url 'chitsummary' %}">Summary</a></li>
 {% endif %}
           </ul>
         </li>
@@ -187,13 +191,13 @@
     {% block content %}
     {% endblock %}
 
-  <footer class="ftco-footer ftco-section">
+  <footer class="ftco-footer ftco-section " style="background-color: coffee ;color: red;">
       <div class="container">
         <div class="row mb-5">
           <div class="col-md">
             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">ArchLab.</h2>
-              <p>Far far away, behind the word mountains, far from the countries.</p>
+              <h2 class="ftco-heading-2">JOSCO JEWELLERS.</h2>
+
               <ul class="ftco-footer-social list-unstyled mt-5">
                 <li class="ftco-animate"><a href="#"><span class="fa fa-twitter"></span></a></li>
                 <li class="ftco-animate"><a href="#"><span class="fa fa-facebook"></span></a></li>
@@ -250,7 +254,7 @@
           <div class="col-md-12 text-center">
 
             <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved  <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="http://joscojewellers.in" target="_blank">Josco Jewellers</a>
   <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
           </div>
         </div>

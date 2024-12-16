@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<form method="POST" action="{% url 'chitsummary' %}" class="d-flex flex-wrap align-items-center border rounded shadow p-3">
+        {% csrf_token %}
+
+
+        <!-- Start Date -->
+        <div class="me-3">
+            <label for="start_date" class="form-label mb-1">Start Date</label>
+            <input type="date" id="start_date" name="start_date1" class="form-control">
+        </div>
+
+        <!-- End Date -->
+        <div class="me-3">
+            <label for="end_date" class="form-label mb-1">End Date</label>
+            <input type="date" id="end_date" name="end_date1" class="form-control">
+        </div>
+
+
+        <!-- Display Button -->
+        <div class="me-3">
+            <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+                Display
+            </button>
+        </div>
+
+
+    </form>
+<h3 class="text-center">GOLD PURCHASE SCHEME SUMMARY</h3>
+<h5 class="text-center">from {{sdate}} to {{edate}}</h5>
+
+<div class="container py-4">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 gx-4 gy-4">
+    {% for k in sdata %}
+      <div class="col">
+        <div class="card shadow border-0 h-100" style="width: 100%; max-width: 350px;min-width: 350px; margin: 0 auto;">
+          <!-- Card Image -->
+          <img src="{% static 'images/' %}{{ k.b_id }}.jpg" class="card-img-top rounded-top" style="height: 250px; object-fit: cover;" alt="images/'|add:{{k.b_id|add:'.jpg'}}">
+
+          <!-- Card Header -->
+          <div class="card-header bg-primary text-white text-center">
+            <h5 class="mb-0" style="font-size: 1.1rem; font-weight: bold;">{{ k.branchname }}</h5>
+          </div>
+
+          <!-- Card Body -->
+          <div class="card-body">
+            <table class="table table-borderless table-sm mb-0">
+              <tbody>
+                <tr>
+                  <td>Open Count</td>
+                  <td class="text-end fw-bold">{{ k.jcount }}</td>
+                </tr>
+                <tr>
+                  <td>Open Amount</td>
+                  <td class="text-end fw-bold">{{ k.jamount }}</td>
+                </tr>
+                <tr>
+                  <td>Receipts Count</td>
+                  <td class="text-end fw-bold">{{ k.pcount }}</td>
+                </tr>
+                <tr>
+                  <td>Receipts Amount</td>
+                  <td class="text-end fw-bold">{{ k.pamount }}</td>
+                </tr>
+                <tr>
+                  <td>Closed Count</td>
+                  <td class="text-end fw-bold">{{ k.ccount }}</td>
+                </tr>
+                <tr>
+                  <td>Closed Amount</td>
+                  <td class="text-end fw-bold">{{ k.camount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Card Footer -->
+          <div class="card-footer bg-light text-center">
+            <a href="#" class="btn btn-primary btn-sm">View Details</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+<script>
+    // Function to set today's date in 'YYYY-MM-DD' format
+    function setDefaultDate() {
+        const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        document.getElementById('start_date').value = today;
+        document.getElementById('end_date').value = today;
+
+    }
+
+    // Call the function when the page loads
+    window.onload = setDefaultDate;
+</script>
+
+
+{% endblock %}
+
+
+

@@ -1,13 +1,1 @@
-asgiref==3.8.1
-backports.zoneinfo==0.2.1
-Django==4.2.17
-django-mssql-backend==2.8.1
-mssql-django==1.5
-mysqlclient==2.2.6
-pyodbc==5.2.0
-python-dateutil==2.9.0.post0
-pytz==2024.2
-six==1.16.0
-sqlparse==0.5.2
-typing-extensions==4.12.2
-tzdata==2024.2
+獡楧敲㵦㌽㠮ㄮ戊捡火牯獴種湯楥普㵯〽㈮ㄮ䐊慪杮㵯㐽㈮ㄮ਷橤湡潧洭獳汱戭捡敫摮㴽⸲⸸਱獭煳⵬橤湡潧㴽⸱ਵ祭煳捬楬湥㵴㈽㈮㘮瀊潹扤㵣㔽㈮〮瀊瑹潨⵮慤整瑵汩㴽⸲⸹⸰潰瑳ਰ祰穴㴽〲㐲㈮猊硩㴽⸱㘱〮猊汱慰獲㵥〽㔮㈮琊灹湩ⵧ硥整獮潩獮㴽⸴㈱㈮琊摺瑡㵡㈽㈰⸴ਲ

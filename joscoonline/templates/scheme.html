@@ -104,14 +104,14 @@
             <td><a href="{% url 'chitdetails' k.erp_scheme_id  %}" target="_blank">{{k.erp_scheme_id}}</a></td>
 
             <td class="text-end">{{k.amount|floatformat:0}}</td>
-            <td class="text-end">{{k.goldweight}}</td>
+            <td class="text-end">{{k.goldweight|floatformat:3}}</td>
             <td class="text-end">{{k.goldrate}}</td>
              <td>{{k.start_date}}</td>
         </tr>
 
     {% endfor %}
         <tr>
-            <td colspan="6"><b>Total</b></td>
+            <td colspan="5"><b>Total</b></td>
             <td class="text-end"><b>{{totalamt}}</b></td>
              <td class="text-end"><b>{{totalwt}}</b></td>
         </tr>

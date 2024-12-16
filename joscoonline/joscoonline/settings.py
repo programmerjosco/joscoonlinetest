@@ -118,7 +118,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR29',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.6.153',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
@@ -130,7 +130,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR32',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.14.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -141,7 +141,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR33',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.12.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -152,7 +152,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR34',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.9.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -163,7 +163,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR35',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.7.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -174,7 +174,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR37',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.8.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -185,7 +185,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR39',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.3.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -196,7 +196,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR40',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.21.101',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -207,7 +207,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR41',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.16.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -218,7 +218,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR42',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.26.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -229,7 +229,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR43',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.27.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -240,7 +240,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR44',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.28.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -251,7 +251,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR45',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.29.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -262,7 +262,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR46',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.31.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -273,7 +273,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR47',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.5.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -284,7 +284,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR1',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.2.11',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -295,7 +295,7 @@ DATABASES = {
         'NAME': 'SCMJOSJMSBR2',  # Your MSSQL database name
         'USER': 'sa',  # MSSQL username
         'PASSWORD': '',  # MSSQL password
-        'HOST': '192.168.13.2',  # MSSQL server address
+        'HOST': '192.168.4.2',  # MSSQL server address
         'PORT': '1433',  # MSSQL port
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',  # Ensure driver is installed
@@ -355,6 +355,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL='/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
