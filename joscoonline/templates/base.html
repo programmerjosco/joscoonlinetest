@@ -116,7 +116,7 @@
       <ul class="navbar-nav ms-auto">
         <!-- Home Link -->
         <li class="nav-item">
-          <a href="index.html" class="nav-link px-3 py-2 rounded-lg transition-all hover-effect">Home</a>
+          <a href="{% url 'home' %}" class="nav-link px-3 py-2 rounded-lg transition-all hover-effect">Home</a>
         </li>
 
         <!-- About Link -->
@@ -132,8 +132,8 @@
             Gold Scheme
           </a>
           <ul class="dropdown-menu shadow-lg" aria-labelledby="goldSchemeDropdown">
-<!--            <li><a class="dropdown-item" href="{% url 'addnewscheme' %}">New Scheme</a></li>-->
-<!--            <li><a class="dropdown-item" href="{% url 'indsoftintegration' %}">Indsoft Integration</a></li>-->
+            <li><a class="dropdown-item" href="{% url 'addnewscheme' %}">New Scheme</a></li>
+            <li><a class="dropdown-item" href="{% url 'indsoftintegration' %}">Indsoft Integration</a></li>
             {% if user.is_superuser %}
     <li><a class="dropdown-item" href="{% url 'adduser' %}">Add New User</a></li>
               <li><a class="dropdown-item" href="{% url 'chitsummary' %}">Summary</a></li>
@@ -282,4 +282,15 @@
   <script src="{% static 'js/main.js' %}"></script>
 
   </body>
+
+<script type="text/javascript">
+    // Session timeout in seconds
+    var sessionTimeout = 600;
+
+    setTimeout(function() {
+        alert("Your session has expired. Redirecting to the login page.");
+        window.location.href = "{% url 'login' %}";
+    }, sessionTimeout * 1000);
+</script>
+
 </html>

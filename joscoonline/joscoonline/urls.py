@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from joscoonline_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path ('',views.home,name="login"),
+    path ('',views.home,name="home"),
     path('login',views.login_user,name="login"),
     path('logout', views.user_logout, name="logout"),
     path('closechit', views.closechit, name="closechit"),

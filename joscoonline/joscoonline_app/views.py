@@ -7,6 +7,7 @@ from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 from dateutil.utils import today
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from dateutil.relativedelta import relativedelta
@@ -73,7 +74,7 @@ def user_logout(request):
     return redirect('login')
 
 
-
+@login_required
 def scheme(request):
     if not request.user.is_authenticated:
         return redirect('login')
@@ -652,7 +653,7 @@ def findrecord(table,condition,value):
 
 
 
-
+@login_required
 def indsoftintegration(request):
     context = {}
 
@@ -719,7 +720,7 @@ def indsoftintegration(request):
 
 
 
-
+@login_required
 def webupdate(request, cust_code=None, chit_key=None):
 
     if request.POST:
@@ -981,7 +982,7 @@ def webupdate(request, cust_code=None, chit_key=None):
                                         </body>
                                         </html>
                                     """)
-
+@login_required
 def adduser(request):
     if request.method == "POST":
         # Handle form submission
@@ -1043,7 +1044,7 @@ def adduser(request):
 
         #return render(request, 'adduser.html')
 
-
+@login_required
 def closechit(request):
     if request.method == 'POST':
         branchid = request.user.branchid
@@ -1210,7 +1211,7 @@ def closechit(request):
             # Log the error for debugging (e.g., use logging)
 
             return HttpResponse("An error occurred while processing your request. Please try again later.", status=500)
-
+@login_required
 def webupdateall(request):
     if request.POST:
         branchid = request.user.branchid
@@ -1487,7 +1488,7 @@ def webupdateall(request):
         # # Ensure that the view returns an HttpResponse even in case of an exception
         #     return HttpResponse("An error occurred while fetching data." + str(e))
 
-
+@login_required
 def chitsummary(request):
     if request.method == "POST":
         # Handle POST request as before

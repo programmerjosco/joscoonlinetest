@@ -16,6 +16,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 600
+SESSION_COOKIE_SECURE = False  # Set to True for HTTPS-only cookies
+SESSION_SAVE_EVERY_REQUEST = True  # Reset session expiry on each user action
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -70,7 +72,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'joscoonline.wsgi.application'
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 MEDIA_ROOT=os.path.join(BASE_DIR),"media"
-
+LOGIN_URL='login'
+LOGIN_REDIRECT_URL = '/home/'  # Redirect after successful login
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
