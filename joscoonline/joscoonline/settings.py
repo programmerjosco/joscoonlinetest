@@ -74,6 +74,7 @@ STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 MEDIA_ROOT=os.path.join(BASE_DIR),"media"
 LOGIN_URL='login'
 LOGIN_REDIRECT_URL = '/home/'  # Redirect after successful login
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 

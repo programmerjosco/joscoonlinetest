@@ -35,6 +35,12 @@ path('scheme',views.scheme,name="scheme"),
     path('webupdateall', views.webupdateall, name='webupdateall'),
     path('adduser', views.adduser, name="adduser"),
     path('chitsummary', views.chitsummary, name="chitsummary"),
+    path('chitreconf', views.chitreconf, name="chitreconf"),
+    path('reconsil', views.reconsil, name="reconsil"),
+    path('indsoftdownload/', views.indsoftdownload, name='indsoftdownload'),
+    path('updatemismatch', views.updatemismatch, name="updatemismatch"),
+    path('razorpayreport', views.razorpayreport, name="razorpayreport"),
+
     # re_path(
     #     r'^indsoftintegration(?:/(?P<cust_code>[^/]*)/(?P<chit_key>[0-9]*)/)?$',
     #     views.indsoftintegration,

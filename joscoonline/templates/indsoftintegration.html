@@ -86,7 +86,7 @@
             </tr>
             {% endfor %}
             <tr>
-        <td colspan="2">
+        <td colspan="6">
   <div class="d-flex justify-content-start align-items-center">
     <form id="f2" method="POST" action="{% url 'closechit' %}" class="d-flex align-items-center border rounded shadow me-3 p-2">
       {% csrf_token %}
@@ -101,10 +101,45 @@
         <input type="hidden" id="start_date_hidden1" name="start_date3" class="form-control">
          <input type="hidden" id="end_date_hidden1" name="end_date3" class="form-control">
 
-      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px; display: none;" disabled>
         Upload to Web -All
       </button>
     </form>
+       <form id="f4" method="POST" action="{% url 'chitreconf' %}" class="d-flex align-items-center border rounded shadow p-2">
+      {% csrf_token %}
+        <input type="hidden" id="start_date_hidden2" name="start_date3" class="form-control">
+         <input type="hidden" id="end_date_hidden2" name="end_date3" class="form-control">
+       <input type="text" id="id" name="id"  style="width:100px" placeholder="Scheme ID" >
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+       Re Calculate
+      </button>
+    </form>
+    <form id="f5" method="POST" action="{% url 'reconsil' %}" class="d-flex align-items-center border rounded shadow p-2">
+      {% csrf_token %}
+
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+      Reconciliation
+      </button>
+    </form>
+       <form id="f6" method="POST" action="{% url 'indsoftdownload' %}" class="d-flex align-items-center border rounded shadow p-2">
+      {% csrf_token %}
+
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+      Download Indsoft Data
+      </button>
+    </form>
+       <form id="f7" method="POST" action="{% url 'updatemismatch' %}" class="d-flex align-items-center border rounded shadow p-2">
+      {% csrf_token %}
+
+      <button type="submit" class="btn text-white px-4" style="background-color: #7c0130; border-radius: 20px;">
+      Update Mismatch
+      </button>
+    </form>
+
+
+
+
+
   </div>
 </td>
         </tr>

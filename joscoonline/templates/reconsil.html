@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load tz %}
+{% block content %}
+  <title>Unmatched Results</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h3 class="text-center">Unmatched Results</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Amount (Indsoft)</th>
+                <th>Amount (Online)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, amount, amount_accumulated in unmatched_data %}
+            <tr>
+                <td>{{ key }}</td>
+                <td>{{ amount }}</td>
+                <td>{{ amount_accumulated }}</td>
+            </tr>
+            {% endfor %}
+
+        <tr>
+                <td>Total Pending {% if diff != 0 %}
+        (Difference: <span style="color:red">{{ diff }}</span>)
+            {% endif %} </td>
+                <td>{{ indsoftsum }}</td>
+                <td>{{ onlinesum }}</td>
+            </tr>
+        <tr>
+                <td>Total count</td>
+                <td>{{ indsoftcount }}    </td>
+                <td>{{ onlinecount }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}
