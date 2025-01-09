@@ -2,15 +2,32 @@
 {% load static %}
 {% block content %}
 <style>
-        .custom-div {
-            background-color: cornsilk; /* Background color */
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Border shadow */
-            border-radius: 8px; /* Optional: gives rounded corners */
-        }
+       .custom-div {
+    background-color: cornsilk; /* Background color */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Border shadow */
+    border-radius: 8px; /* Optional: gives rounded corners */
+    width: 100%; /* Set width to 90% of the viewport width, adjust as needed */
+    max-width: 1200px; /* Optional: Set a maximum width for large screens */
+    margin: 0 auto; /* Centers the div horizontally */
+    padding: 20px; /* Adds space inside the div */
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    -webkit-overflow-scrolling: touch; /* For smoother scrolling on touch devices */
+}
+
+.table {
+    width: 100%;
+    min-width: 1200px; /* Ensure the table's content fits in the container */
+    /* Prevent table columns from expanding */
+}
+
     </style>
 <body style="background-color:cornsilk;">
 <!--<div class="d-flex justify-content-center align-items-center vh-100 mt-5">-->
-<div class="container" style="margin-top: 10px;">
+<div class="container" style="margin-top: 10px; width:100%">
     <!-- Combined Form -->
     <form method="POST" action="{% url 'scheme' %}" class="d-flex flex-wrap align-items-center border rounded shadow p-3">
         {% csrf_token %}
@@ -72,55 +89,83 @@
     </div>
 {% endif %}
 <div class="container custom-div">
-    <table class="table bordered">
-        <thead>
+    <div class="table-container">
+        <table class="table bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Scheme ID</th>
+                    <th scope="col">Indsoft ID</th>
+
+                    <th class="text-end" scope="col">Amount</th>
+                    <th class="text-end" scope="col">Gold Wt.</th>
+                    <th class="text-end" scope="col">Gold Rate</th>
+                    <th scope="col">
+                        {% if rtype == "Closed Report" %}
+                            Closing Date
+                        {% else %}
+                            Scheme Date
+                        {% endif %}
+                    </th>
+                    <th  scope="col">Order ID</th>
+                    <th  scope="col">Transaction ID</th>
+                     <th class="text-end" scope="col">Order Status</th>
+                     <th class="text-end" scope="col">Payment Amount</th>
+                    <th  scope="col">Payment Status</th>
+                    <th  scope="col">Payment Method</th>
+                    <th  scope="col">VPA</th>
+                    <th  scope="col">email</th>
+                    <th  scope="col">Mobile</th>
+                    <th  scope="col">Bank RRN</th>
+                    <th  scope="col">UPI ID</th>
+                    <th  scope="col">UTR</th>
+                    <th class="text-end" scope="col">Credited Amount</th>
+                    <th class="text-end" scope="col">Fees</th>
+                    <th class="text-end" scope="col">Tax</th>
+                </tr>
+            </thead>
+
+            {% for k in sdata %}
+                <tr   {% if k.pay_status %}style="background-color: coral;"{% endif %} >
+                    <td>{{forloop.counter}}</td>
+                    <td>{{k.name}}</td>
+                    <td>{{k.phone}}</td>
+                    <td>{{k.scheme_id}}</td>
+                    <td><a href="{% url 'chitdetails' k.scheme_id  %}" target="_blank">{{k.erp_scheme_id}}</a></td>
+
+                    <td class="text-end">{{k.amount|floatformat:0}}</td>
+                    <td class="text-end">{{k.goldweight|floatformat:3}}</td>
+                    <td class="text-end">{{k.goldrate}}</td>
+                    <td>{{k.start_date}}</td>
+                    <td>{{k.order_id}}</td>
+                    <td>{{k.payment_id}}</td>
+                    <td>{{k.order_status}}</td>
+                    <td>{{k.amount_paid}}</td>
+                     <td>{{k.pay_status}}</td>
+                     <td>{{k.method}}</td>
+                    <td>{{k.vpa}}</td>
+                     <td>{{k.email}}</td>
+                     <td>{{k.contact}}</td>
+                     <td>{{k.rrn}}</td>
+                     <td>{{k.upi_transaction_id}}</td>
+                     <td>{{k.settlement_utr}}</td>
+                     <td>{{k.credit}}</td>
+                     <td>{{k.fee}}</td>
+                    <td>{{k.tax}}</td>
+
+                </tr>
+            {% endfor %}
+
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Scheme ID</th>
-                <th scope="col">Indsoft ID</th>
-
-                <th class="text-end" scope="col">Amount</th>
-                <th class="text-end" scope="col">Gold Wt.</th>
-                <th class="text-end" scope="col">Gold Rate</th>
-               <th scope="col">
-    {% if rtype == "Closed Report" %}
-        Closing Date
-    {% else %}
-        Scheme Date
-    {% endif %}
-</th>
-
+                <td colspan="5"><b>Total</b></td>
+                <td class="text-end"><b>{{totalamt}}</b></td>
+                <td class="text-end"><b>{{totalwt}}</b></td>
             </tr>
-        </thead>
 
- {% for k in sdata %}
-        <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{k.name}}</td>
-            <td>{{k.phone}}</td>
-            <td>{{k.scheme_id}}</td>
-            <td><a href="{% url 'chitdetails' k.erp_scheme_id  %}" target="_blank">{{k.erp_scheme_id}}</a></td>
-
-            <td class="text-end">{{k.amount|floatformat:0}}</td>
-            <td class="text-end">{{k.goldweight|floatformat:3}}</td>
-            <td class="text-end">{{k.goldrate}}</td>
-             <td>{{k.start_date}}</td>
-        </tr>
-
-    {% endfor %}
-        <tr>
-            <td colspan="5"><b>Total</b></td>
-            <td class="text-end"><b>{{totalamt}}</b></td>
-             <td class="text-end"><b>{{totalwt}}</b></td>
-        </tr>
-
-
-
-    </table>
-</div>
-
+        </table>
+    </div>
 </div>
 
 

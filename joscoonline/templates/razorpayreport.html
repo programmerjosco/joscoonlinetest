@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+
+    <h2>Razorpay Report</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Amount</th>
+                <th>Order Status</th>
+                <th>Payment ID</th>
+                <th>Payment Amount</th>
+                <th>Payment Status</th>
+                <th>UTR</th>
+                <th>Settlement ID</th>
+                <th>Settlement Status</th>
+                <th>Settlement Amount</th>
+            </tr>
+        </thead>
+       <pre>{{ data|json_script:"data" }}</pre>
+        <tbody>
+            {% for record in data %}
+                <tr>
+                    <td>{{ record.order_id }}</td>
+                    <td>{{ record.order_amount }}</td>
+                    <td>{{ record.order_status }}</td>
+                    <td>{{ record.payment_id }}</td>
+                    <td>{{ record.payment_amount }}</td>
+                    <td>{{ record.payment_status }}</td>
+                    <td>{{ record.utr }}</td>
+                    <td>{{ record.settlement_id }}</td>
+                    <td>{{ record.settlement_status }}</td>
+                    <td>{{ record.settlement_amount100 }}/100</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="10">No data available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

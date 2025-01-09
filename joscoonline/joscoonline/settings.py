@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_COOKIE_AGE = 600
+SESSION_COOKIE_AGE = 1200
 SESSION_COOKIE_SECURE = False  # Set to True for HTTPS-only cookies
 SESSION_SAVE_EVERY_REQUEST = True  # Reset session expiry on each user action
 
@@ -26,8 +26,8 @@ SESSION_SAVE_EVERY_REQUEST = True  # Reset session expiry on each user action
 SECRET_KEY = 'django-insecure-uj6kvopn3i92venue86bnt4s==nq6*5oj(o$t1$03*+-5-mk0d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['reports.joscojewellers.in', 'localhost', '127.0.0.1']
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -74,6 +74,7 @@ STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 MEDIA_ROOT=os.path.join(BASE_DIR),"media"
 LOGIN_URL='login'
 LOGIN_REDIRECT_URL = '/home/'  # Redirect after successful login
+
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 

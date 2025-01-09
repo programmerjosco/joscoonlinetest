@@ -109,6 +109,18 @@
       }
     }
 
+    #zoomImage {
+    transition: transform 0.5s ease; /* Smooth transition for zoom effect */
+    cursor: zoom-in;
+}
+
+#zoomImage:hover {
+    transform: scale(3); /* Adjust the scale for the zoom level */
+    z-index: 1000;
+}
+
+
+
   </style>
 </head>
 <body>
@@ -215,6 +227,11 @@
              <hr>
                <h6 class="card-title">Closing Date  :   {{j.closingdate}}</h6>
              <h6 class="card-title">Invoice Number  :   {{j.invoice}}</h6>
+             {% if j.frontside|length >= 10 %}
+             <img src ="https://josco.s3.ap-south-1.amazonaws.com/{{j.frontside}}" style="width:200px; height:150px"  id="zoomImage">
+             {% else %}
+    <!-- Optionally, you can display something else or leave it empty -->
+            {% endif %}
 <!--           # <p class="card-text"><small class="text-muted">Joined 2 years ago</small></p>-->
             {% endfor %}
           </div>
@@ -235,7 +252,45 @@
     </div>
 
 
+  <div class="card-body tab-content" id="myTabContent6">
+    <div class="container">
+        <!-- Shadow Round Box -->
+        <div class="card shadow-lg rounded p-4">
+            <h4>Update ERP ID</h4>
 
+            <!-- Form Fields in a Single Row -->
+            {% for j in mdata %}
+           <form method="POST" action="{% url 'updateid' j.schemeid %}" id="paymentForm2">
+    {% csrf_token %}
+    <div class="row g-3 align-items-center">
+        <!-- Date Field -->
+        <div class="col-md-2">
+            <label for="erpid" class="form-label">ERP ID</label>
+
+<input type="text" id="erpid" name="erpid"
+       class="form-control"
+       value="{{ j.erpid|upper }}"
+       {% if j.erpid|upper != 'NONE' %}readonly{% endif %}
+       required
+       style="text-transform: uppercase;"
+       oninput="this.value = this.value.toUpperCase();">
+
+
+
+        </div>
+
+        <!-- Submit Button -->
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100"
+                     {% if j.erpid|upper != 'NONE' %} disabled {% endif %}>
+                Submit
+            </button>
+        </div>
+    </div>
+</form>
+ {% endfor %}
+        </div>
+    </div>
 
 
 
@@ -289,6 +344,26 @@
             </form>
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!-- Confirmation Modal -->
     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
