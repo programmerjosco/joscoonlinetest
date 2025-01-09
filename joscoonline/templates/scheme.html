@@ -133,7 +133,7 @@
                     <td>{{k.name}}</td>
                     <td>{{k.phone}}</td>
                     <td>{{k.scheme_id}}</td>
-                    <td><a href="{% url 'chitdetails' k.erp_scheme_id  %}" target="_blank">{{k.erp_scheme_id}}</a></td>
+                    <td><a href="{% url 'chitdetails' k.scheme_id  %}" target="_blank">{{k.erp_scheme_id}}</a></td>
 
                     <td class="text-end">{{k.amount|floatformat:0}}</td>
                     <td class="text-end">{{k.goldweight|floatformat:3}}</td>

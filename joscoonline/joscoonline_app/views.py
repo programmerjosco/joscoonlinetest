@@ -6,6 +6,7 @@ from os import truncate
 from random import random
 from datetime import date, timedelta
 
+
 import openpyxl
 from dateutil.relativedelta import relativedelta
 from dateutil.utils import today
@@ -111,12 +112,12 @@ def scheme(request):
         QQ = "Joining Report"
         query = f"""
                    SELECT gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id,
-                          sum(gsd.amount) as amount, sum(gsd.gold_weight) as gold_weight ,  ROUND(SUM(gsd.amount)/SUM(gsd.gold_weight), 2) AS gold_rate,  gsm.start_date
+                          sum(gsd.amount) as amount, sum(gsd.gold_weight) as gold_weight ,  ROUND(SUM(gsd.amount)/SUM(gsd.gold_weight), 2) AS gold_rate,  gsm.start_date,gsm.scheme_id
                    FROM gold_scheme_masters gsm
                    JOIN gold_scheme_details gsd ON gsm.id = gsd.scheme_master_id
                    JOIN users u ON gsm.user_id = u.id
                    WHERE 
-                     gsm.branch_id = {branchid}  and erp_scheme_id ='{ search_query }' group by gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id,gsm.start_date;
+                     gsm.branch_id = {branchid}  and erp_scheme_id ='{ search_query }' group by gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id,gsm.start_date,gsm.scheme_id;
                """
     else:
         if report_type == '1':
@@ -126,20 +127,20 @@ def scheme(request):
                        SUM(gsd.amount) AS amount,
                        TRUNCATE(SUM(gsd.gold_weight), 3) AS gold_weight,
                        ROUND(SUM(gsd.amount)/SUM(gsd.gold_weight), 2) AS gold_rate,
-                       gsm.start_date
+                       gsm.start_date,gsm.scheme_id
                 FROM gold_scheme_masters gsm
                 JOIN gold_scheme_details gsd ON gsm.id = gsd.scheme_master_id
                 JOIN users u ON gsm.user_id = u.id
                 WHERE gsm.start_date BETWEEN '{start_date1}' AND '{end_date1}'
                   AND gsm.branch_id = {branchid}
-                GROUP BY gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id, gsm.start_date;
+                GROUP BY gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id, gsm.start_date,gsm.scheme_id;
             """
         elif report_type == '2':
             QQ = "Payment Report"
             query = f"""
             SELECT gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id,
                   
-                   gsd.amount, gsd.gold_weight, gsd.gold_rate, gsd.current_date,gsd.raz_order_id,gsd.transaction_ID
+                   gsd.amount, gsd.gold_weight, gsd.gold_rate, gsd.current_date,gsd.raz_order_id,gsd.transaction_ID,gsm.scheme_id
             FROM gold_scheme_masters gsm
             JOIN gold_scheme_details gsd ON gsm.id = gsd.scheme_master_id
             JOIN users u ON gsm.user_id = u.id
@@ -151,12 +152,12 @@ def scheme(request):
                 query = f"""
                    SELECT gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id,
                    
-                   sum(gsd.amount) as amount, TRUNCATE(sum(gsd.gold_weight),3) as gold_weight , ROUND(SUM(gsd.amount)/SUM(gsd.gold_weight), 2) AS gold_rate, gsm.closing_date
+                   sum(gsd.amount) as amount, TRUNCATE(sum(gsd.gold_weight),3) as gold_weight , ROUND(SUM(gsd.amount)/SUM(gsd.gold_weight), 2) AS gold_rate, gsm.closing_date,gsm.scheme_id
             FROM gold_scheme_masters gsm
                     JOIN gold_scheme_details gsd ON gsm.id = gsd.scheme_master_id
                     JOIN users u ON gsm.user_id = u.id
                     WHERE gsm.closing_date BETWEEN '{start_date1}' AND '{end_date1}'
-                      AND gsm.branch_id = {branchid} group by gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id , gsm.closing_date; """
+                      AND gsm.branch_id = {branchid} group by gsm.id, u.name, u.phone, gsm.scheme_id, gsm.erp_scheme_id , gsm.closing_date,gsm.scheme_id; """
         else:
                    pass
 
@@ -192,19 +193,20 @@ def scheme(request):
             'start_date': row[8].strftime('%d/%m/%Y'),
             'order_id': order_id,
             'payment_id': payment_id,
-            'order_status': order_data.get('status', '').upper(),
-            'amount_paid': int(order_data.get('amount_paid', 0) / 100),
-            'pay_status': payment_data.get('status', '').upper(),
-            'method': payment_data.get('method', '').upper(),
-            'vpa': payment_data.get('vpa', ''),
-            'email': payment_data.get('email', ''),
-            'contact': payment_data.get('contact', ''),
-            'rrn': payment_data.get('acquirer_data', {}).get('rrn', ''),
-            'upi_transaction_id':payment_data.get('acquirer_data', {}).get('upi_transaction_id', ''),
-            'settlement_utr': settlement_data[0].get('settlement_utr', ''),
-            'credit': settlement_data[0].get('credit', 0)/100,
-            'fee': (settlement_data[0].get('fee', 0) / 100)-(settlement_data[0].get('tax', 0) / 100),
-            'tax': settlement_data[0].get('tax', 0) / 100
+            'order_status': (order_data or {}).get('status', '').upper(),
+            'amount_paid': int((order_data or {}).get('amount_paid', 0) / 100),
+            'pay_status': (payment_data or {}).get('status', '').upper(),
+            'method': (payment_data or {}).get('method', '').upper(),
+            'vpa': (payment_data or {}).get('vpa', ''),
+            'email':(payment_data or {}).get('email', ''),
+            'contact': (payment_data or {}).get('contact', ''),
+            'rrn': (payment_data or {}).get('acquirer_data', {}).get('rrn', ''),
+            'upi_transaction_id':(payment_data or {}).get('acquirer_data', {}).get('upi_transaction_id', ''),
+            'settlement_utr': settlement_data[0].get('settlement_utr', '') if isinstance(settlement_data[0], dict) else '',
+            'credit': settlement_data[0].get('credit', 0) / 100 if settlement_data and isinstance(settlement_data[0], dict) else 0,
+            'fee': (settlement_data[0].get('fee', 0) / 100)-(settlement_data[0].get('tax', 0) / 100)if settlement_data and isinstance(settlement_data[0], dict) else 0,
+            'tax': settlement_data[0].get('tax', 0) / 100if settlement_data and isinstance(settlement_data[0], dict) else 0,
+            'web_scheme_ID': row[9]
         })
 
 
@@ -257,7 +259,7 @@ def chitdetails(request, id):
             JOIN 
                 users u ON gsm.user_id = u.id
             WHERE 
-                erp_scheme_id = '{id}' AND gsm.branch_id = {branchid};
+                scheme_id = '{id}' AND gsm.branch_id = {branchid};
         """
 
         with connection.cursor() as cursor2:
@@ -288,7 +290,11 @@ def chitdetails(request, id):
                 gsm.closing_date,
                 gsm.invoice_number,
                 kyc.type,
-                gsm.scheme_peroid
+                gsm.scheme_peroid,
+                kyc.front_side,
+                kyc.back_side,
+                gsm.erp_scheme_id,
+                gsm.scheme_id
                
             FROM 
                 gold_scheme_masters gsm
@@ -297,7 +303,7 @@ def chitdetails(request, id):
             LEFT JOIN 
                 user_kycs kyc ON u.id = kyc.user_id
             WHERE 
-                gsm.erp_scheme_id = '{id}' AND gsm.branch_id = {branchid}
+                gsm.scheme_id = '{id}' AND gsm.branch_id = {branchid}
                 AND u.name <> ''
                 AND (kyc.user_id IS NULL OR kyc.name <> '');
         """
@@ -338,6 +344,10 @@ def chitdetails(request, id):
                     'period': row1[9],
                     'monthdif': months_diff,
                     'nomineeinfo': nominee_info,
+                     'frontside': row1[10],
+                    'backside': row1[11],
+                    'erpid': row1[12],
+                    'schemeid': row1[13],
                 })
 
         # Totals
@@ -384,7 +394,7 @@ def addpayment(request):
         with connection.cursor() as cursor1:
             cursor1.execute(query1)
             result = cursor1.fetchone()  # Get the first row (if there is one)
-            amount1=int(result[4])
+            amount1 = int(float(result[4]))
             gwt1=result[5]
             ERPID=result[3]
 
@@ -658,6 +668,7 @@ def generate_unique_scheme_id():
 
 def searchrecord(table,condition):
     query = f"""SELECT COUNT(*) FROM {table} WHERE {condition}"""
+
     is_unique = True
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -2211,3 +2222,68 @@ def razorpayreport(request):
     # return render(request,"razorpayreport.html",{"data":combined_data})
     #
     return HttpResponse("Nothing")
+
+
+# def ewaybill(request):
+#     # API URL
+#     url = "https://gstsandbox.charteredinfo.com/ewaybillapi/dec/v1.03/auth?action=ACCESSTOKEN"
+#
+#     # Payload with the required parameters
+#     params = {
+#         'aspid': '1772833225',  # Your ASPID
+#         'password': 'kannan123*',  # Your Password
+#         'gstin': '32AJOPT3810A1ZK',  # Your GSTIN
+#         'username': 'rajeshonlines',  # Your Username
+#         'ewbpwd': 'Palakunnel143*'  # Your e-Way Bill Password
+#     }
+#
+#     try:
+#         # Sending the POST request with the params
+#         response = requests.post(url, params=params, timeout=10)
+#
+#         # Check if the request was successful
+#         if response.status_code == 200:
+#             data = response.json()
+#
+#             # If successful, check for the Auth Token
+#             if 'authToken' in data:
+#                 auth_token = data['authToken']
+#                 expiry_time = data.get('expiryTime', 'Not available')
+#
+#                 return JsonResponse({
+#                     'success': True,
+#                     'authToken': auth_token,
+#                     'expiryTime': expiry_time
+#                 })
+#             else:
+#                 return JsonResponse({
+#                     'success': False,
+#                     'error': 'Auth Token not found',
+#                     'message': data.get('message', 'Unknown error')
+#                 })
+#         else:
+#             return JsonResponse({
+#                 'success': False,
+#                 'error': 'Failed to fetch Auth Token',
+#                 'message': response.text
+#             })
+#
+#     except requests.exceptions.RequestException as e:
+#         # Handle exceptions such as timeouts or connection errors
+#         return JsonResponse({
+#             'success': False,
+#             'error': str(e)
+#         }, status=500)
+
+
+def updateid(request,id):
+    if request.POST:
+        branchid = request.user.branchid
+        cust_code = request.POST.get("erpid")
+
+        if not searchrecord("gold_scheme_masters",f"branch_id= {branchid}  and erp_scheme_id='{cust_code}'"):
+            query=f"""update gold_scheme_masters set erp_scheme_id='{cust_code}' where branch_id={branchid } and scheme_id='{id}'"""
+            with connection.cursor() as cursor1:
+                cursor1.execute(query)
+                affected_rows = cursor1.rowcount
+            return HttpResponse(str(affected_rows) + " Rows affected and Updated Sucessfully")
